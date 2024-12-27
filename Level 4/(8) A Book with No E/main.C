@@ -1,26 +1,27 @@
 #include <stdio.h>  
 #include <string.h>  
 int main () {  
-    float o[26] = {0}, wc = 0;  
-    char t[10000],l[1000],lo = 'A';  
-    while (fgets(l, 1000, stdin) != NULL) strncat(t, l, sizeof(t) - strlen(t) - 1);
-    char *w = strtok(t," .,!?\"();\n");  
+    float occurence[26] = {0}, wordCount = 0;  
+    char text[10000],line[1000];
+    while (fgets(line, 1000, stdin) != NULL) strncat(text, line, sizeof(text) - strlen(text) - 1);
+    char *w = strtok(text," .,!?\"();\n");  
     while (w != NULL) {  
         for (int i = 0; i < 26; i ++) for (int j = 0; j < strlen(w); j++)   
         if (w[j] == 'A' + i || w[j] == 'a' + i) {  
-            o[i] ++;  
+            occurence[i] ++;  
             break;  
         }  
-        wc++;  
+        wordCount++;  
         w = strtok(NULL," .,!?\"();\n");  
     }  
 
-    int lon = o[0];  
+    char lowestOccurence = 'A';  
+    int lon = occurence[0];  
     for (int i = 0; i < 26; i ++) {  
-        printf("%c occurs in %.2f percent of words\n", i + 'A', o[i]*100/wc);  
-        if (lon <= o[i]) continue;  
-        lon = o[i];  
-        lo = i + 'A';  
+        printf("%c occurs in %.2f percent of words\n", i + 'A', occurence[i]*100/wordCount);  
+        if (lon <= occurence[i]) continue;  
+        lon = occurence[i];  
+        lowestOccurence = i + 'A';  
     }  
-    printf("\nThe letter that is easiest to avoid is '%c'\n", lo);  
+    printf("\nThe letter that is easiest to avoid is '%c'\n", lowestOccurence);  
 }  

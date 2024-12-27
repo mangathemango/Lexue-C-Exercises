@@ -1,7 +1,7 @@
 #include <stdio.h>  
   
 char suits[5] = "CDSH";  
-// The 1 is there so that   
+// The 1 is there so that i can return the value of 10 easier later
 char weights[14] = "234567891JQKA";  
   
 struct Card {  
