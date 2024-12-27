@@ -89,6 +89,7 @@ int tractorSuitValue (struct Card *card) {
 }  
   
 void processTractor (struct Player *player) {  
+    // In tractor, we will store how many times each weight and each suit have occured in the 3 cards throw the below 2 arrays
     int weightCounter[13] = {0};  
     int suitCounter[4] = {0};  
     int flush = 0;  

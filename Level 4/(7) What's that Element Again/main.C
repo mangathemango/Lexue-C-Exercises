@@ -1,8 +1,9 @@
 #include <stdio.h>  
 #include <string.h>  
-  
+#include <stdlib.h>
+
 char elements_data[119][30] = {  
-    "0123456789", // This elemnent is here so that I don't have to add 1 to the index later;  
+    "0  ,Sk,Skibidium", // This elemnent is here so that I don't have to add 1 to the index later;  
     "1  ,H ,Hydrogen",  
     "2  ,He,Helium",  
     "3  ,Li,Lithium",  
@@ -122,29 +123,14 @@ char elements_data[119][30] = {
     "117,Ts,Tennessine",  
     "118,Og,Oganesson"  
 };  
-  
-int convertCharToInt (char ch) {  
-    return ch - '0';  
-}  
-  
-int power (int base, int exponent) {  
-    int result = 1;  
-    for (int i = 0; i < exponent; i++) {  
-        result *= base;  
-    }  
-    return result;  
-}  
-  
-int convertStringToInt (char input[]) {  
-    int result = 0;  
-    for (int i = 0; i < strlen(input); i++) {  
-        int decimalPlace = strlen(input) - i - 1;  
-          
-        result += convertCharToInt(input[i]) * power(10,decimalPlace);  
-    }  
-    return result;  
-}  
-  
+
+struct Element {
+    int atomic;
+    char *symbol;
+    char *name;
+};
+
+struct Element elementList[119];
   
 int isIntString (char input[]) {  
     for (int i = 0; i < strlen(input); i++) {  
@@ -155,121 +141,39 @@ int isIntString (char input[]) {
     return 1;  
 }  
   
-int isAtomicNumString (char input[]) {  
-    int atomicNum = convertStringToInt(input);  
-      
-    if (atomicNum < 1 || atomicNum > 118) {  
-        return 0;  
-    }  
-    return 1;  
-}  
-  
-int isSymbolString (char input[]) {  
-    if (strlen(input) > 2) return 0;  
-    return 1;  
-}  
-  
-void getElementbyAtomicNum (char *elementData, int atomicNum) {  
-    strcpy(elementData,elements_data[atomicNum]);  
-}  
-  
-int getAtomicNumbySymbol (char symbol[]) {  
+int getAtomicNumbyString (char string[]) {  
     for (int atomicNum = 1; atomicNum <= 118; atomicNum++) {  
-        char element[30];  
-        getElementbyAtomicNum(element, atomicNum);  
-          
-        if (element[5] != ' ' && strlen(symbol) == 1) {  
-            continue;  
-        }  
-        if (symbol[0] == element[4] && (symbol[1] == element[5] || strlen(symbol) == 1 )) {  
-            return atomicNum;  
-        }  
+        if (strcmp(string,elementList[atomicNum].symbol) == 0) return atomicNum;
+        if (strcmp(string,elementList[atomicNum].name) == 0) return atomicNum;
     }  
     return 0;  
 }  
-  
-int getAtomicNumbyName (char name[]) {  
-      
-    for (int atomicNum = 1; atomicNum <= 118; atomicNum++) {  
-        int found = 1;  
-        char element[30];  
-        getElementbyAtomicNum(element, atomicNum);  
-          
-        if (strlen(name) != strlen(element) - 7) {  
-            continue;  
-        }  
-        for (int i = 0; i < strlen(name); i++) {  
-            if (name[i] != element[i + 7]) {  
-                found = 0;  
-                break;  
-            }  
-        }  
-        if (!found) continue;   
-        else return atomicNum;  
-          
-    }  
-    return 0;  
-}  
-  
-void getSymbol (char *dest, char element[]) {  
-    char symbol[2];  
-    symbol[0] = element[4];  
-    if (element[5] != ' ') {  
-        symbol[1] = element[5];  
-    }  
-    symbol[2] = '\0';  
-    strcpy(dest,symbol);  
-}  
-  
-void getName (char *dest, char element[]) {  
-    char name[20];  
-    for (int i = 7; i < strlen(element); i++) {  
-        name[i - 7] = element[i];  
-    }  
-    name[strlen(element)-7] = '\0';  
-    strcpy(dest,name);  
-}  
+
   
 int main () {  
+    for (int i = 0; i < 119; i ++) {
+        int dataLen = strlen(elements_data[i]);
+        elementList[i].atomic = i;
+        char *temp = strtok(elements_data[i]," ,");
+        temp = strtok(NULL," ,");
+        elementList[i].symbol = temp;
+        temp = strtok(NULL," ,");
+        elementList[i].name = temp;
+    }
       
     while (1) {  
         printf("Enter atomic number, name, or symbol (blank to exit):\n");  
-          
         char input[20];  
-        if (scanf("%s",&input) != 1){  
-            break;     
-        }  
+        if (scanf("%s",&input) != 1) break;
+
         if (isIntString(input)) {  
-            if (isAtomicNumString(input)) {  
-                int atomicNum = convertStringToInt(input);  
-                char elementData[30];  
-                getElementbyAtomicNum(elementData, atomicNum);  
-                  
-                char symbol[2];  
-                char name[20];  
-                  
-                getSymbol(symbol, elementData);  
-                getName(name, elementData);  
-                  
-                printf("Element: %s (Symbol: %s)\n", name, symbol);  
-                  
-            } else {  
-                printf("No element found with atomic number %d.\n",convertStringToInt(input));  
-            }  
-            continue;  
-        }   
-        if (isSymbolString(input)) {  
-            if (getAtomicNumbySymbol(input) == 0) {  
-                printf("No element found with name or symbol '%s'.\n",input);  
-                continue;  
-            }  
-            printf("Atomic number: %d\n",getAtomicNumbySymbol(input));  
-            continue;  
-        }  
-        if (getAtomicNumbyName(input) != 0) {  
-            printf("Atomic number: %d\n",getAtomicNumbyName(input));  
+            int atomicNum = atoi(input);  
+            if (atomicNum >= 1 && atomicNum <= 118) printf("Element: %s (Symbol: %s)\n", elementList[atomicNum].name, elementList[atomicNum].symbol);    
+            else printf("No element found with atomic number %d.\n",atomicNum);  
         } else {  
-            printf("No element found with name or symbol '%s'.\n",input);  
-        }  
+            int atomicNum = getAtomicNumbyString(input);
+            if (atomicNum) printf("Atomic number: %d\n",atomicNum); 
+            else printf("No element found with name or symbol '%s'.\n",input);  
+        }
     }  
-}  
+}
