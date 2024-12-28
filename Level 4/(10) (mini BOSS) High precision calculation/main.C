@@ -5,7 +5,7 @@ int isNumberChar (char ch) {
     return (ch >= '0' && ch <= '9')? 1 : 0;  
 }  
 
-// lexue doesn't have built in strrev
+// lexue doesn't have built in strreverse
 void strreverse (char *str) {  
     if (str == NULL) return;  
     int len = strlen(str);  
@@ -33,8 +33,8 @@ int compareStrings (char *num1, char *num2) {
 void addStrings (char *sum, char *num1, char *num2) {  
     int len1 = strlen(num1);  
     int len2 = strlen(num2);  
-    strrev(num1);  
-    strrev(num2);  
+    strreverse(num1);  
+    strreverse(num2);  
       
     int longerLen = len1 > len2? len1 : len2;  
     int carry = 0;  
@@ -60,7 +60,7 @@ void addStrings (char *sum, char *num1, char *num2) {
     }  
     if (carry == 1) sum[i++] = '1';  
     sum[i] = '\0';  
-    strrev(sum);  
+    strreverse(sum);  
 }  
   
 void subStrings (char *dif, char *num1, char *num2) {  
@@ -74,8 +74,8 @@ void subStrings (char *dif, char *num1, char *num2) {
         num1 = num2;  
         num2 = temp;  
     }  
-    strrev(num1);  
-    strrev(num2);  
+    strreverse(num1);  
+    strreverse(num2);  
     int len1 = strlen(num1);  
     int len2 = strlen(num2);  
     int longerLen = len1 > len2? len1 : len2;  
@@ -102,7 +102,7 @@ void subStrings (char *dif, char *num1, char *num2) {
     }  
     if (negative) dif[i++] = '-';  
     dif[i] = '\0';  
-    strrev(dif);  
+    strreverse(dif);  
 }  
   
 void printString(char *string) {  

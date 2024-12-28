@@ -126,8 +126,8 @@ char elements_data[119][30] = {
 
 struct Element {
     int atomic;
-    char *symbol;
-    char *name;
+    char* symbol;
+    char* name;
 };
 
 struct Element elementList[119];
@@ -151,11 +151,13 @@ int getAtomicNumbyString (char string[]) {
 
   
 int main () {  
+    // elements_data[i] = "0  ,Sk,Skibidium"
+    // "0" "Sk" "Skibidium"
     for (int i = 0; i < 119; i ++) {
         int dataLen = strlen(elements_data[i]);
         elementList[i].atomic = i;
-        char *temp = strtok(elements_data[i]," ,");
-        temp = strtok(NULL," ,");
+        char *temp = strtok(elements_data[i]," ,"); // *0
+        temp = strtok(NULL," ,"); // "Sk"
         elementList[i].symbol = temp;
         temp = strtok(NULL," ,");
         elementList[i].name = temp;
